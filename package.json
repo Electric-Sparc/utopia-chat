@@ -8,8 +8,7 @@
   "author": "",
   "license": "ISC",
   "bin": {
-    "terminance": "./index.js",
-    "spinner": "./spinners.json"
+    "terminance": "./index.js"
   },
   "dependencies": {
     "axios": "^0.20.0",
