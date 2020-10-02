@@ -3,7 +3,7 @@
 'use strict'
 
 // const signalExit = require('signal-exit');
-// const yargs = require("yargs");
+const yargs = require("yargs");
 // const chalk = require("chalk");
 // const figlet = require('figlet');
 // const repl = require("repl");
@@ -14,10 +14,32 @@ const std = process.stdout
 const io = require("socket.io-client");
 const readline = require("readline");
 
+const options = yargs
+ .usage("Usage: -n <name>")
+ .option("n", { alias: "name", describe: "Your name", type: "string", demandOption: true })
+ .argv;
+
+const CFonts = require('cfonts');
+
+CFonts.say('Utopia is Real!', {
+    font: '3d',              // define the font face
+    align: 'center',              // define text alignment
+    colors: ['yellowBright','cyan'],         // define all colors
+    background: 'transparent',  // define the background color, you can also use `backgroundColor` here as key
+    letterSpacing: 0.5,           // define letter spacing
+    lineHeight: 0.1,              // define the line height
+    space: true,                // define if the output text should have empty lines on top and on the bottom
+    maxLength: '0',             // define how many character can be on one line
+    gradient: false,            // define your two gradient colors
+    independentGradient: false, // define if you want to recalculate the gradient for each new line
+    transitionGradient: false,  // define if this is a transition between colors directly
+    env: 'node'                 // define the environment CFonts is being executed in
+});
+
 const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-  prompt: "> ",
+ input: process.stdin,
+ output: process.stdout,
+ prompt: options.name + "> ",
 });
 
 const serverURL = "https://cli-socket-chat-server.herokuapp.com";
@@ -48,36 +70,6 @@ rl.on("close", () => {
   console.log("Bye 👋🏻");
   process.exit(0);
 });
-
-class Spinner {
-  spin() {
-    process.stdout.write("\x1B[?25h")
-
-    const spinnerFrames = [
-			".  ",
-			".. ",
-			"...",
-			" ..",
-			"  .",
-			"   "
-		]
-    const spinnerTimeInterval = 200
-    let index = 0
-
-    this.timer = setInterval(() => {
-      let now = spinnerFrames[index]
-      if (now == undefined) {
-        index = 0
-        now = spinnerFrames[index]
-      }
-      std.write(now)
-      readline.moveCursor(std, -3, 0)
-
-      index = index >= spinnerFrames.length ? 0 : index + 1
-    }, spinnerTimeInterval)
-  }
-}
-new Spinner().spin()
 
 // signalExit(() => {
 //   process.stderr.write('\u001B[?25l');
