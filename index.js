@@ -51,16 +51,16 @@ socket.on("connect", (data) => {
 });
 
 socket.on("msgAll", (data) => {
-  if (data.user != socket.id) {
-    rl.pause();
-    console.log(`[${data.user}]: ${data.msg}`);
+  if (data.user != options.name) {
+    readline.moveCursor(std, -1 *(options.name.length) - 2, 0);
+    console.log(`${data.user}: ${data.msg}`);
   }
   rl.prompt();
 });
 
 rl.on("line", (line) => {
   socket.emit("msg", {
-    user: socket.id,
+    user: options.name,
     msg: line.trim(),
   });
   rl.prompt();
